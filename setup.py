@@ -7,7 +7,7 @@ setup(
     license='MIT',
     author='Robbie Clarken',
     author_email='robbie.clarken@gmail.com',
-    url='https://github.com/RobbieClarken/',
+    url='https://github.com/RobbieClarken/youtube-channel-to-playlist',
     py_modules=['channel_to_playlist'],
     install_requires=['google-api-python-client'],
     entry_points={

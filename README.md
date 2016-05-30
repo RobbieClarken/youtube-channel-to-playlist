@@ -8,23 +8,22 @@ watched.
 
 # Installation
 
-1. Install the Google API client library:
+1. Install this application with pip:
 
   ```bash
-  pip install google-api-python-client
+  pip install git+https://github.com/RobbieClarken/youtube-channel-to-playlist
   ```
 
 2. Create a project through the [Google Developers Console](https://console.developers.google.com/project).
 3. Create an OAuth Client ID for a native application through the APIs & Auth /
    Credentials section of your project.
 4. Download the OAuth client secrets JSON file from the Credentials page and
-   rename it to `client_secrets.json`. Place this file in the same folder as
-   `channel_to_playlist.py`.
+   rename it to `client_secrets.json`.
 
 # Usage
 
 ```bash
-./channel_to_playlist.py source-channel-id target-playlist-id
+channel_to_playlist --secrets client_secrets.json source-channel-id target-playlist-id
 ```
 
 where `source-channel-id` and `target-playlist-id` can be found from the URLs of
@@ -35,7 +34,7 @@ to [this playlist](https://www.youtube.com/playlist?list=PLlgnub_DBR_CszAWpJypws
 you would run:
 
 ```bash
-./channel_to_playlist.py UCgxzjK6GuOHVKR_08TT4hJQ PLlgnub_DBR_CszAWpJypwst0OFDxW6jOJ
+channel_to_playlist --secrets client_secrets.json UCgxzjK6GuOHVKR_08TT4hJQ PLlgnub_DBR_CszAWpJypwst0OFDxW6jOJ
 ```
 
 The script will store the video IDs that are added to the playlist in a file

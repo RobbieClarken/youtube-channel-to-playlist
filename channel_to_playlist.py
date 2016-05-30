@@ -21,10 +21,11 @@ import sys
 
 def get_authenticated_service(args):
     flow = flow_from_clientsecrets(
-        filename='client_secrets.json',
-        message='Missing client_secrets.json file.\nDownload from '\
-                'https://console.developers.google.com/project/YOUR_PROJECT_ID/apiui/credential.',
-        scope='https://www.googleapis.com/auth/youtube'
+        filename=args.secrets,
+        message=('Missing client_secrets.json file.\nDownload from '
+                 'https://console.developers.google.com'
+                 '/project/YOUR_PROJECT_ID/apiui/credential.'),
+        scope='https://www.googleapis.com/auth/youtube',
     )
     storage = Storage('.channel_to_playlist-oauth2-credentials.json')
     credentials = storage.get()
@@ -69,28 +70,33 @@ def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file=None):
                                },
                            },
                        })\
-                .execute()
+               .execute()
         if added_videos_file:
             added_videos_file.write(video_id + '\n')
     if count:
         sys.stdout.write('\n')
 
 
-if __name__ == '__main__':
-
+def main():
+    argparser.add_argument('--secrets', default='client_secrets.json',
+                           help='Google API OAuth secrets file')
     argparser.add_argument('channel_id', help='id of channel to copy videos from')
     argparser.add_argument('playlist_id', help='id of playlist to add videos to')
-
     args = argparser.parse_args()
+
     youtube = get_authenticated_service(args)
     channel_playlist_id = get_channel_upload_playlist_id(youtube, args.channel_id)
     video_ids = get_playlist_video_ids(youtube, channel_playlist_id)
     added_videos_filename = 'playlist-{}-added-videos'.format(args.playlist_id)
 
     if os.path.exists(added_videos_filename):
-        with open(added_videos_filename, 'rb') as f:
+        with open(added_videos_filename) as f:
             added_video_ids = set(map(str.strip, f.readlines()))
         video_ids = [vid_id for vid_id in video_ids if vid_id not in added_video_ids]
 
-    with open(added_videos_filename, 'ab') as f:
+    with open(added_videos_filename, 'a') as f:
         add_to_playlist(youtube, args.playlist_id, video_ids, f)
+
+
+if __name__ == '__main__':
+    main()

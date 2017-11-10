@@ -10,14 +10,18 @@ watched.
 
 1. Install this application with pip:
 
-  ```bash
-  pip install git+https://github.com/RobbieClarken/youtube-channel-to-playlist
-  ```
+    ```bash
+    pip install git+https://github.com/RobbieClarken/youtube-channel-to-playlist
+    ```
 
-2. Create a project through the [Google Developers Console](https://console.developers.google.com/project).
-3. Create an OAuth Client ID for a native application through the APIs & Auth /
-   Credentials section of your project.
-4. Download the OAuth client secrets JSON file from the Credentials page and
+2. Create a project through the [Google Cloud Console](https://console.cloud.google.com/).
+3. Enable your project to use the YouTube Data API via the [APIs &
+   Services Dashboard](https://console.cloud.google.com/apis/dashboard).
+4. Create an OAuth Client ID for a native application through the
+   [Credentials](https://console.cloud.google.com/apis/credentials) page under APIs &
+   Services.
+5. Download the OAuth client secrets JSON file from the
+   [Credentials](https://console.cloud.google.com/apis/credentials) page and
    rename it to `client_secrets.json`.
 
 # Usage

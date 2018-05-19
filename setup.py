@@ -1,9 +1,9 @@
 from setuptools import setup
-import re
+
 
 setup(
     name='YouTubeChannelToPlaylist',
-    version='1.0.0',
+    version='1.0.1',
     license='MIT',
     author='Robbie Clarken',
     author_email='robbie.clarken@gmail.com',

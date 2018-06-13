@@ -76,7 +76,6 @@ def add_video_to_playlist(youtube, playlist_id, video_id, skip_if_already_exists
         raise
         
 
-
 def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file, skip_if_already_exists):
     count = len(video_ids)
     for video_num, video_id in enumerate(video_ids, start=1):

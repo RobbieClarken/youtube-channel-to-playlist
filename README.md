@@ -1,5 +1,9 @@
 # YouTube Channel to Playlist
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/RobbieClarken/youtube-channel-to-playlist/blob/master/LICENSE)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+
+
 Keeping track of which YouTube videos you have watched can be tricky,
 especially because the "WATCHED" indicator seems to be ephemeral. This script
 allows you to add all videos from a YouTube channel to a playlist that you

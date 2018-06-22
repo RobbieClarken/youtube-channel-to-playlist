@@ -13,6 +13,7 @@ Usage:
 import os
 import sys
 
+from apiclient.errors import HttpError
 from apiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
@@ -57,12 +58,8 @@ def get_playlist_video_ids(youtube, playlist_id):
     return [item["snippet"]["resourceId"]["videoId"] for item in items]
 
 
-def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file=None):
-    count = len(video_ids)
-    for video_num, video_id in enumerate(video_ids, start=1):
-        sys.stdout.write("\rAdding video {} of {}".format(video_num, count))
-        sys.stdout.flush()
-        youtube.playlistItems().insert(
+def add_video_to_playlist(youtube, playlist_id, video_id):
+    youtube.playlistItems().insert(
             part="snippet",
             body={
                 "snippet": {
@@ -71,6 +68,17 @@ def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file=None):
                 }
             },
         ).execute()
+        
+
+def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file, skip_existing_videos):
+    existing_videos = get_playlist_video_ids(youtube, playlist_id)
+    count = len(video_ids)
+    for video_num, video_id in enumerate(video_ids, start=1):
+        if video_id in existing_videos and skip_existing_videos:
+            continue
+        sys.stdout.write("\rAdding video {} of {}".format(video_num, count))
+        sys.stdout.flush()
+        add_video_to_playlist(youtube, playlist_id, video_id)
         if added_videos_file:
             added_videos_file.write(video_id + "\n")
     if count:
@@ -80,6 +88,9 @@ def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file=None):
 def main():
     argparser.add_argument(
         "--secrets", default="client_secrets.json", help="Google API OAuth secrets file"
+    )
+    argparser.add_argument(
+        "--skip_existing", required=False, default=True, type=lambda s: s.lower() == 'true', help="Skip videos, which already exist in playlist"
     )
     argparser.add_argument("channel_id", help="id of channel to copy videos from")
     argparser.add_argument("playlist_id", help="id of playlist to add videos to")
@@ -96,7 +107,7 @@ def main():
         video_ids = [vid_id for vid_id in video_ids if vid_id not in added_video_ids]
 
     with open(added_videos_filename, "a") as f:
-        add_to_playlist(youtube, args.playlist_id, video_ids, f)
+        add_to_playlist(youtube, args.playlist_id, video_ids, f, args.skip_existing)
 
 
 if __name__ == "__main__":

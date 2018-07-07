@@ -8,7 +8,7 @@ YouTubeChannelToPlaylist = {git = "https://github.com/RobbieClarken/youtube-chan
 
 [dev-packages]
 "e1839a8" = {path = ".", editable = true}
-black = "*"
+black = "==18.6b4"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"

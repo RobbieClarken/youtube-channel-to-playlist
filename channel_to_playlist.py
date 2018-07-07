@@ -12,6 +12,8 @@ Usage:
 
 import os
 import sys
+import warnings
+from http import HTTPStatus
 
 from apiclient.errors import HttpError
 from apiclient.discovery import build
@@ -59,7 +61,8 @@ def get_playlist_video_ids(youtube, playlist_id):
 
 
 def add_video_to_playlist(youtube, playlist_id, video_id):
-    youtube.playlistItems().insert(
+    try:
+        youtube.playlistItems().insert(
             part="snippet",
             body={
                 "snippet": {
@@ -68,19 +71,31 @@ def add_video_to_playlist(youtube, playlist_id, video_id):
                 }
             },
         ).execute()
-        
+    except HttpError as exc:
+        if exc.resp.status == HTTPStatus.CONFLICT:
+            # watch-later playlist don't allow duplicates
+            raise VideoAlreadyInPlaylistError()
+        raise
 
-def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file, skip_existing_videos):
+
+def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file, add_duplicates):
     existing_videos = get_playlist_video_ids(youtube, playlist_id)
     count = len(video_ids)
     for video_num, video_id in enumerate(video_ids, start=1):
-        if video_id in existing_videos and skip_existing_videos:
+        if video_id in existing_videos and not add_duplicates:
             continue
         sys.stdout.write("\rAdding video {} of {}".format(video_num, count))
         sys.stdout.flush()
-        add_video_to_playlist(youtube, playlist_id, video_id)
+        try:
+            add_video_to_playlist(youtube, playlist_id, video_id)
+        except VideoAlreadyInPlaylistError:
+            if add_duplicates:
+                warnings.warn(
+                    f"video {video_id} cannot be added as it is already in the playlist"
+                )
         if added_videos_file:
             added_videos_file.write(video_id + "\n")
+        existing_videos.append(video_id)
     if count:
         sys.stdout.write("\n")
 
@@ -90,7 +105,9 @@ def main():
         "--secrets", default="client_secrets.json", help="Google API OAuth secrets file"
     )
     argparser.add_argument(
-        "--skip_existing", required=False, default=True, type=lambda s: s.lower() == 'true', help="Skip videos, which already exist in playlist"
+        "--allow-duplicates",
+        action="store_true",
+        help="Add videos even if they are already in the playlist",
     )
     argparser.add_argument("channel_id", help="id of channel to copy videos from")
     argparser.add_argument("playlist_id", help="id of playlist to add videos to")
@@ -107,7 +124,11 @@ def main():
         video_ids = [vid_id for vid_id in video_ids if vid_id not in added_video_ids]
 
     with open(added_videos_filename, "a") as f:
-        add_to_playlist(youtube, args.playlist_id, video_ids, f, args.skip_existing)
+        add_to_playlist(youtube, args.playlist_id, video_ids, f, args.allow_duplicates)
+
+
+class VideoAlreadyInPlaylistError(Exception):
+    """ video already in playlist """
 
 
 if __name__ == "__main__":

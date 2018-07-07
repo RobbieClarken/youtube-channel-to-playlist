@@ -49,7 +49,8 @@ The script will store the video IDs that are added to the playlist in a file
 and skip these videos if it is run again. This allows you to re-run the script
 when new videos are uploaded to the channel.
 
-To skip videos, which already exist in the playlist, use the `--skip_existing` switch, as shown in the following example:
+To add videos which already exist in the playlist, use the `--allow-duplicates` switch, as shown in the following example:
+
 ```bash
-channel_to_playlist --secrets client_secrets.json UCgxzjK6GuOHVKR_08TT4hJQ PLlgnub_DBR_CszAWpJypwst0OFDxW6jOJ --skip_existing True
+channel_to_playlist --secrets client_secrets.json UCgxzjK6GuOHVKR_08TT4hJQ PLlgnub_DBR_CszAWpJypwst0OFDxW6jOJ --allow-duplicates
 ```

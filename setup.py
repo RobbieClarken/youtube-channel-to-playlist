@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="YouTubeChannelToPlaylist",
-    version="1.0.1",
+    version="2.0.0",
     license="MIT",
     author="Robbie Clarken",
     author_email="robbie.clarken@gmail.com",

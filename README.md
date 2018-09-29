@@ -12,10 +12,12 @@ watched.
 
 # Installation
 
+Requirements: Python 3.6 or later.
+
 1. Install this application with pip:
 
     ```bash
-    pip install git+https://github.com/RobbieClarken/youtube-channel-to-playlist
+    python3 -m pip install git+https://github.com/RobbieClarken/youtube-channel-to-playlist
     ```
 
 2. Create a project through the [Google Cloud Console](https://console.cloud.google.com/).

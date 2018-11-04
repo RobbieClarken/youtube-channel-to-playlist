@@ -1,0 +1,130 @@
+{
+  "kind": "youtube#playlistItemListResponse",
+  "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k/Oc5RHtAa6C6esch_v3Pb-GVRg9E\"",
+  "pageInfo": {
+    "totalResults": 3,
+    "resultsPerPage": 50
+  },
+  "items": [
+    {
+      "kind": "youtube#playlistItem",
+      "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k/rHAJTc8mfxTRJbu4EoI6g6VCA3k\"",
+      "id": "UExsZ251Yl9EQlJfQ0pGcVJqLUdjeDRfbm15YkhBbnRraS41NkI0NEY2RDEwNTU3Q0M2",
+      "snippet": {
+        "publishedAt": "2018-11-04T04:25:43.000Z",
+        "channelId": "UCDbgKqaxGiGnX89vIGFqxPA",
+        "title": "test-fixture-video-1",
+        "description": "",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/M1-eVW6Tboc/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/M1-eVW6Tboc/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/M1-eVW6Tboc/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/M1-eVW6Tboc/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          }
+        },
+        "channelTitle": "Robbie Clarken",
+        "playlistId": "PLlgnub_DBR_CJFqRj-Gcx4_nmybHAntki",
+        "position": 0,
+        "resourceId": {
+          "kind": "youtube#video",
+          "videoId": "M1-eVW6Tboc"
+        }
+      }
+    },
+    {
+      "kind": "youtube#playlistItem",
+      "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k/AQswakC-R3bQfpjXa6ON1nWoT30\"",
+      "id": "UExsZ251Yl9EQlJfQ0pGcVJqLUdjeDRfbm15YkhBbnRraS4yODlGNEE0NkRGMEEzMEQy",
+      "snippet": {
+        "publishedAt": "2018-11-04T04:26:27.000Z",
+        "channelId": "UCDbgKqaxGiGnX89vIGFqxPA",
+        "title": "test-fixture-video-2",
+        "description": "",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/ZBpSxpvZoW0/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/ZBpSxpvZoW0/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/ZBpSxpvZoW0/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/ZBpSxpvZoW0/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          }
+        },
+        "channelTitle": "Robbie Clarken",
+        "playlistId": "PLlgnub_DBR_CJFqRj-Gcx4_nmybHAntki",
+        "position": 1,
+        "resourceId": {
+          "kind": "youtube#video",
+          "videoId": "ZBpSxpvZoW0"
+        }
+      }
+    },
+    {
+      "kind": "youtube#playlistItem",
+      "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k/asZbbZGMMPBMsiHafhr8S7EzuZM\"",
+      "id": "UExsZ251Yl9EQlJfQ0pGcVJqLUdjeDRfbm15YkhBbnRraS4wMTcyMDhGQUE4NTIzM0Y5",
+      "snippet": {
+        "publishedAt": "2018-11-04T04:27:10.000Z",
+        "channelId": "UCDbgKqaxGiGnX89vIGFqxPA",
+        "title": "test-fixture-video-3",
+        "description": "",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/wuzCwOO7QDs/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/wuzCwOO7QDs/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/wuzCwOO7QDs/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/wuzCwOO7QDs/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          }
+        },
+        "channelTitle": "Robbie Clarken",
+        "playlistId": "PLlgnub_DBR_CJFqRj-Gcx4_nmybHAntki",
+        "position": 2,
+        "resourceId": {
+          "kind": "youtube#video",
+          "videoId": "wuzCwOO7QDs"
+        }
+      }
+    }
+  ]
+}

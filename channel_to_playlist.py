@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
+#!/usr/bin/env python3
 """
 Add videos from a YouTube channel to a playlist.
 
@@ -9,18 +7,27 @@ Usage:
   channel_to_playlist.py source-channel-id target-playlist-id
 
 """
-
 import os
 import sys
 import warnings
+from argparse import ArgumentParser
 from http import HTTPStatus
 
-from apiclient.errors import HttpError
+import dateutil.parser
+import httplib2
 from apiclient.discovery import build
+from apiclient.errors import HttpError
+from dateutil import tz
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
-from oauth2client.tools import argparser, run_flow
-import httplib2
+from oauth2client.tools import run_flow
+
+
+def _parse_date(string):
+    dt = dateutil.parser.parse(string)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=tz.UTC)
+    return dt
 
 
 def get_authenticated_service(args):
@@ -41,22 +48,32 @@ def get_authenticated_service(args):
 
 
 def get_channel_upload_playlist_id(youtube, channel_id):
-    channel_response = (
-        youtube.channels().list(id=channel_id, part="contentDetails").execute()
-    )
+    channel_response = youtube.channels().list(id=channel_id, part="contentDetails").execute()
     return channel_response["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
 
 
-def get_playlist_video_ids(youtube, playlist_id):
-    request = youtube.playlistItems().list(
-        playlistId=playlist_id, part="snippet", maxResults=50
-    )
+def get_playlist_video_ids(
+    youtube, playlist_id, *, published_after=None, published_before=None, http=None
+):
+    request = youtube.playlistItems().list(playlistId=playlist_id, part="snippet", maxResults=50)
     items = []
     while request:
-        response = request.execute()
+        response = request.execute(http=http)
         items += response["items"]
         request = youtube.playlistItems().list_next(request, response)
-    items.sort(key=lambda item: item["snippet"]["publishedAt"])
+    if published_after is not None:
+        items = [
+            item
+            for item in items
+            if _parse_date(item["snippet"]["publishedAt"]) >= published_after
+        ]
+    if published_before is not None:
+        items = [
+            item
+            for item in items
+            if _parse_date(item["snippet"]["publishedAt"]) < published_before
+        ]
+    items.sort(key=lambda item: _parse_date(item["snippet"]["publishedAt"]))
     return [item["snippet"]["resourceId"]["videoId"] for item in items]
 
 
@@ -90,9 +107,7 @@ def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file, add_dupl
             add_video_to_playlist(youtube, playlist_id, video_id)
         except VideoAlreadyInPlaylistError:
             if add_duplicates:
-                warnings.warn(
-                    f"video {video_id} cannot be added as it is already in the playlist"
-                )
+                warnings.warn(f"video {video_id} cannot be added as it is already in the playlist")
         if added_videos_file:
             added_videos_file.write(video_id + "\n")
         existing_videos.append(video_id)
@@ -100,7 +115,8 @@ def add_to_playlist(youtube, playlist_id, video_ids, added_videos_file, add_dupl
         sys.stdout.write("\n")
 
 
-def main():
+def _parse_args(args):
+    argparser = ArgumentParser(description="Add videos from a YouTube channel to a playlist")
     argparser.add_argument(
         "--secrets", default="client_secrets.json", help="Google API OAuth secrets file"
     )
@@ -109,13 +125,35 @@ def main():
         action="store_true",
         help="Add videos even if they are already in the playlist",
     )
+    argparser.add_argument(
+        "--after",
+        type=_parse_date,
+        dest="published_after",
+        help="Only add videos published after this date",
+    )
+    argparser.add_argument(
+        "--before",
+        type=_parse_date,
+        dest="published_before",
+        help="Only add videos published before this date",
+    )
     argparser.add_argument("channel_id", help="id of channel to copy videos from")
     argparser.add_argument("playlist_id", help="id of playlist to add videos to")
-    args = argparser.parse_args()
+    parsed = argparser.parse_args(args)
+    return parsed
+
+
+def main():
+    args = _parse_args(sys.argv[1:])
 
     youtube = get_authenticated_service(args)
     channel_playlist_id = get_channel_upload_playlist_id(youtube, args.channel_id)
-    video_ids = get_playlist_video_ids(youtube, channel_playlist_id)
+    video_ids = get_playlist_video_ids(
+        youtube,
+        channel_playlist_id,
+        published_after=args.published_after,
+        published_before=args.published_before,
+    )
     added_videos_filename = "playlist-{}-added-videos".format(args.playlist_id)
 
     if os.path.exists(added_videos_filename):

@@ -1,11 +1,16 @@
 repos:
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v4.3.4
+    hooks:
+      - id: isort
   - repo: https://github.com/ambv/black
-    rev: 18.6b4
+    rev: 18.9b0
     hooks:
       - id: black
         language_version: python3.7
+        entry: python3 -m black --line-length 99
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v1.2.3
+    rev: v2.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer

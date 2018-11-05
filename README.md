@@ -47,6 +47,14 @@ you would run:
 channel_to_playlist --secrets client_secrets.json UCgxzjK6GuOHVKR_08TT4hJQ PLlgnub_DBR_CszAWpJypwst0OFDxW6jOJ
 ```
 
+If you only want to add videos published after or before a certain date, you can use the `--after`
+and `--before` options:
+
+
+```bash
+channel_to_playlist --after 2018-05-21 --before 2018-06-30 UCgxzjK6GuOHVKR_08TT4hJQ PLlgnub_DBR_CszAWpJypwst0OFDxW6jOJ
+```
+
 The script will store the video IDs that are added to the playlist in a file
 and skip these videos if it is run again. This allows you to re-run the script
 when new videos are uploaded to the channel.

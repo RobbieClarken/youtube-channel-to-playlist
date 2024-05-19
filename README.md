@@ -12,7 +12,7 @@ watched.
 
 # Installation
 
-Requirements: Python 3.6 or later.
+Requirements: Python 3.12 or later.
 
 1. Install this application with pip:
 
@@ -21,12 +21,18 @@ Requirements: Python 3.6 or later.
     ```
 
 2. Create a project through the [Google Cloud Console](https://console.cloud.google.com/).
-3. Enable your project to use the YouTube Data API via the [APIs &
-   Services Dashboard](https://console.cloud.google.com/apis/dashboard).
-4. Create an OAuth Client ID for a native application through the
+3. Enable your project to use the YouTube Data API v3 via the
+    [APIs & Services Dashboard](https://console.cloud.google.com/apis/dashboard).
+4. Configure an
+    [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent):
+    - On the _Scopes_ page of the app registration, add the
+     `https://www.googleapis.com/auth/youtube` scope.
+    - On the _Test users_ page add your email.
+5. Create an OAuth Client ID through the
    [Credentials](https://console.cloud.google.com/apis/credentials) page under APIs &
-   Services.
-5. Download the OAuth client secrets JSON file from the
+   Services, selecting:
+    - Application type: Desktop app
+7. Download the OAuth client secrets JSON file from the
    [Credentials](https://console.cloud.google.com/apis/credentials) page and
    rename it to `client_secrets.json`.
 
@@ -37,7 +43,11 @@ channel_to_playlist --secrets client_secrets.json source-channel-id target-playl
 ```
 
 where `source-channel-id` and `target-playlist-id` can be found from the URLs of
-the YouTube channel and playlist.
+the YouTube channel and playlist. To find the channel id of a YouTube account
+like `https://www.youtube.com/@AntsCanada`:
+1. Click on the channel description text.
+2. Scroll down to Channel Details.
+3. Click _Share Channel > Copy channel ID_.
 
 For example, to copy videos from the [PyCon 2015 Channel](https://www.youtube.com/channel/UCgxzjK6GuOHVKR_08TT4hJQ)
 to [this playlist](https://www.youtube.com/playlist?list=PLlgnub_DBR_CszAWpJypwst0OFDxW6jOJ)

@@ -14,13 +14,10 @@ from argparse import ArgumentParser
 from http import HTTPStatus
 
 import dateutil.parser
-import httplib2
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from dateutil import tz
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import run_flow
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 def _parse_date(string):
@@ -31,20 +28,18 @@ def _parse_date(string):
 
 
 def get_authenticated_service(args):
-    flow = flow_from_clientsecrets(
-        filename=args.secrets,
-        message=(
-            "Missing client_secrets.json file.\nDownload from "
-            "https://console.developers.google.com"
-            "/project/YOUR_PROJECT_ID/apiui/credential."
-        ),
-        scope="https://www.googleapis.com/auth/youtube",
+    flow = InstalledAppFlow.from_client_secrets_file(
+        client_secrets_file=args.secrets,
+        scopes=["https://www.googleapis.com/auth/youtube"],
     )
-    storage = Storage(".channel_to_playlist-oauth2-credentials.json")
-    credentials = storage.get()
-    if credentials is None or credentials.invalid:
-        credentials = run_flow(flow, storage, args)
-    return build("youtube", "v3", http=credentials.authorize(httplib2.Http()))
+    credentials = flow.run_local_server(
+        host="localhost",
+        port=8080,
+        authorization_prompt_message="Please visit this URL: {url}",
+        success_message="The auth flow is complete; you may close this window.",
+        open_browser=True,
+    )
+    return build("youtube", "v3", credentials=credentials)
 
 
 def get_channel_upload_playlist_id(youtube, channel_id):
@@ -166,7 +161,7 @@ def main():
 
 
 class VideoAlreadyInPlaylistError(Exception):
-    """ video already in playlist """
+    """video already in playlist"""
 
 
 if __name__ == "__main__":
